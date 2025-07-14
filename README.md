@@ -1,8 +1,41 @@
 # ViOS Binutils
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)](https://github.com/PinkQween/ViOS-binutils)
-[![Target](https://img.shields.io/badge/target-i386--vios--elf-blue)](https://github.com/PinkQween/ViOS-binutils)
+## 📊 Repository Stats
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![GitHub Repo Size](https://img.shields.io/github/repo-size/PinkQween/ViOS-binutils)
+![Files in Repo](https://img.shields.io/github/directory-file-count/PinkQween/ViOS-binutils?type=file)
+![Last Commit](https://img.shields.io/github/last-commit/PinkQween/ViOS-binutils)
+![Release](https://img.shields.io/github/v/release/PinkQween/ViOS-binutils)
+![Downloads](https://img.shields.io/github/downloads/PinkQween/ViOS-binutils/total)
+
+---
+
+### ViOS Toolchain Versions
+
+The following components are versioned together and must be used in compatible versions:
+
+![GitHub Release](https://img.shields.io/github/v/release/pinkqween/vios-libc?label=Libc%20Version)
+![GitHub Release](https://img.shields.io/github/v/release/pinkqween/vios-binutils?label=Binutils%20Version)
+![GitHub Release](https://img.shields.io/github/v/release/pinkqween/vios?label=ViOS%20Version)
+
+---
+
+## 🔧 Build Status
+
+[![Build: Libc](https://github.com/PinkQween/ViOS-Libc/actions/workflows/build.yml/badge.svg)](https://github.com/PinkQween/ViOS-Libc/actions/workflows/build.yml)
+[![Build: Binutils](https://github.com/PinkQween/ViOS-Libc/actions/workflows/build.yml/badge.svg)](https://github.com/PinkQween/ViOS-binutils/actions/workflows/build.yml)
+[![Build: OS (ViOS)](https://github.com/PinkQween/ViOS/actions/workflows/build.yml/badge.svg)](https://github.com/PinkQween/ViOS/actions/workflows/build.yml)
+
+---
+
+## 🧠 Community and Contribution
+
+![GitHub Discussions](https://img.shields.io/github/discussions/PinkQween/binutils)
+![Forks](https://img.shields.io/github/forks/PinkQween/binutils?style=social)
+![Commit Activity](https://img.shields.io/github/commit-activity/w/PinkQween/binutils)
+![Total Issues](https://img.shields.io/github/issues-closed-raw/PinkQween/binutils?label=total%20issues&color=blue)
+![Total PRs](https://img.shields.io/github/issues-pr-closed-raw/PinkQween/binutils?label=total%20PRs&color=blue)
 
 A collection of binary utilities specifically designed for the ViOS operating system, targeting the i386 architecture with ELF format.
 
