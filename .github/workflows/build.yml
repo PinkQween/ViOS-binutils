@@ -24,13 +24,12 @@ jobs:
       run: |
         brew install zlib
     
-    - name: Configure
-      run: |
-        ./configure --prefix=/opt/vios-binutils
-    
     - name: Build
       run: |
-        make -j$(sysctl -n hw.ncpu)
+        # Skip ViOS libc installation in CI
+        mkdir -p /tmp/fake-vios/lib
+        touch /tmp/fake-vios/lib/libViOSlibc.a
+        make -j$(sysctl -n hw.ncpu) VIOS_PREFIX=/tmp/fake-vios
     
     - name: Test
       run: |
@@ -39,7 +38,7 @@ jobs:
     - name: Create distribution
       if: matrix.arch == 'x86_64'
       run: |
-        make install DESTDIR=$PWD/dist
+        make install DESTDIR=$PWD/dist VIOS_PREFIX=$PWD/dist/opt/ViOS
         tar -czf vios-binutils-macos-${{ matrix.arch }}.tar.gz -C dist .
     
     - name: Upload artifacts
@@ -60,13 +59,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y build-essential zlib1g-dev
     
-    - name: Configure
-      run: |
-        ./configure --prefix=/opt/vios-binutils
-    
     - name: Build
       run: |
-        make -j$(nproc)
+        # Skip ViOS libc installation in CI
+        mkdir -p /tmp/fake-vios/lib
+        touch /tmp/fake-vios/lib/libViOSlibc.a
+        make -j$(nproc) VIOS_PREFIX=/tmp/fake-vios
     
     - name: Test
       run: |
@@ -74,7 +72,7 @@ jobs:
     
     - name: Create distribution
       run: |
-        make install DESTDIR=$PWD/dist
+        make install DESTDIR=$PWD/dist VIOS_PREFIX=$PWD/dist/opt/ViOS
         tar -czf vios-binutils-linux-x86_64.tar.gz -C dist .
     
     - name: Upload artifacts
