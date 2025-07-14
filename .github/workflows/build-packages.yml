@@ -213,7 +213,7 @@ jobs:
           
       - name: Delete existing release if it exists
         run: |
-          # Delete existing release and tag if they exist
+          # Delete existing release if it exists
           if gh release view ${{ github.ref_name }} >/dev/null 2>&1; then
             echo "Deleting existing release ${{ github.ref_name }}"
             gh release delete ${{ github.ref_name }} --yes
@@ -224,13 +224,28 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
         
-      - name: Create release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: release_files/*
-          generate_release_notes: true
-          draft: false
-          prerelease: false
-          fail_on_unmatched_files: false
+      - name: Create release with GitHub CLI
+        run: |
+          # Create release with all files
+          echo "Creating release ${{ github.ref_name }}"
+          
+          # Build file list
+          FILES=()
+          for file in release_files/*; do
+            if [ -f "$file" ]; then
+              FILES+=("$file")
+            fi
+          done
+          
+          echo "Files to upload: ${FILES[@]}"
+          
+          # Create the release
+          gh release create ${{ github.ref_name }} \
+            --title "ViOS Binutils ${{ github.ref_name }}" \
+            --notes "Automated release of ViOS binutils with integrated libc support for i386-vios-elf target." \
+            --latest \
+            "${FILES[@]}"
+            
+          echo "Release created successfully"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
