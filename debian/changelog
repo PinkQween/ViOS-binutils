@@ -1,0 +1,10 @@
+vios-binutils (1.0.0-1) unstable; urgency=low
+
+  * Initial release of ViOS binutils
+  * Integrated ViOS libc from GitHub releases
+  * Support for i386-vios-elf target architecture
+  * Complete set of binary utilities for ViOS development
+  * Automatic download and installation of ViOS libc
+  * Custom linker scripts for ViOS
+
+ -- ViOS Development Team <dev@vios.org>  Mon, 14 Jul 2025 13:47:00 +0000

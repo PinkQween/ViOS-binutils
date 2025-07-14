@@ -1,5 +1,5 @@
 class ViosBinutils < Formula
-  desc "Binary utilities for the ViOS operating system (i386-vios-elf target)"
+  desc "Binary utilities for the ViOS operating system (i386-vios-elf target) with integrated libc"
   homepage "https://github.com/PinkQween/ViOS-binutils"
   url "https://github.com/PinkQween/ViOS-binutils/archive/v1.0.0.tar.gz"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000" # This will be updated when you create the release
@@ -7,11 +7,12 @@ class ViosBinutils < Formula
   head "https://github.com/PinkQween/ViOS-binutils.git", branch: "main"
 
   depends_on "zlib"
+  depends_on "curl"
 
   def install
-    system "./configure", "--prefix=#{prefix}", "--target=i386-vios-elf"
-    system "make"
-    system "make", "install"
+    # Build and install with integrated ViOS libc
+    system "make", "PREFIX=#{prefix}", "VIOS_PREFIX=#{prefix}/vios"
+    system "make", "install", "PREFIX=#{prefix}", "VIOS_PREFIX=#{prefix}/vios", "DESTDIR=#{prefix}"
   end
 
   test do
@@ -29,6 +30,10 @@ class ViosBinutils < Formula
 
     # Test that the linker script exists
     assert_predicate lib/"ldscripts/vios.ld", :exist?
+
+    # Test that ViOS libc is installed
+    assert_predicate prefix/"vios/lib/libViOSlibc.a", :exist?
+    assert_predicate prefix/"vios/include", :exist?
 
     # Test version output (if implemented)
     system bin/"i386-vios-elf-ld", "--version" rescue nil

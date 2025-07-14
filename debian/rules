@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE=1
+
+# Use the makefile to build and install
+%:
+	dh $@
+
+override_dh_auto_build:
+	$(MAKE) PREFIX=/usr VIOS_PREFIX=/opt/ViOS
+
+override_dh_auto_install:
+	$(MAKE) install PREFIX=/usr VIOS_PREFIX=/opt/ViOS DESTDIR=$(CURDIR)/debian/vios-binutils
+
+override_dh_auto_clean:
+	$(MAKE) clean
+
+# Skip tests for now as we need cross-compilation environment
+override_dh_auto_test:
+	# Tests are disabled as they require cross-compilation setup

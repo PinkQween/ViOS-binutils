@@ -1,0 +1,31 @@
+Source: vios-binutils
+Section: devel
+Priority: optional
+Maintainer: ViOS Development Team <dev@vios.org>
+Build-Depends: debhelper (>= 10), build-essential, zlib1g-dev, curl
+Standards-Version: 4.1.2
+Homepage: https://github.com/PinkQween/ViOS-binutils
+Vcs-Git: https://github.com/PinkQween/ViOS-binutils.git
+Vcs-Browser: https://github.com/PinkQween/ViOS-binutils
+
+Package: vios-binutils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, zlib1g, curl
+Description: Binary utilities for the ViOS operating system (i386-vios-elf target)
+ This package provides a complete set of binary utilities for the ViOS
+ operating system, targeting the i386-vios-elf architecture. It includes
+ the ViOS libc library and all necessary development tools.
+ .
+ The package includes:
+  - i386-vios-elf-ld (linker)
+  - i386-vios-elf-objdump (object file dumper)
+  - i386-vios-elf-objcopy (object file copier)
+  - i386-vios-elf-ar (archiver)
+  - i386-vios-elf-nm (symbol table lister)
+  - i386-vios-elf-strip (symbol stripper)
+  - i386-vios-elf-size (size analyzer)
+  - i386-vios-elf-readelf (ELF file analyzer)
+  - i386-vios-elf-strings (string extractor)
+  - i386-vios-elf-as (assembler)
+  - ViOS libc library and headers
+  - Linker scripts for ViOS
