@@ -226,26 +226,45 @@ jobs:
         
       - name: Create release with GitHub CLI
         run: |
-          # Create release with all files
+          # Create release first without files
           echo "Creating release ${{ github.ref_name }}"
           
-          # Build file list
-          FILES=()
-          for file in release_files/*; do
-            if [ -f "$file" ]; then
-              FILES+=("$file")
-            fi
-          done
-          
-          echo "Files to upload: ${FILES[@]}"
-          
-          # Create the release
           gh release create ${{ github.ref_name }} \
             --title "ViOS Binutils ${{ github.ref_name }}" \
             --notes "Automated release of ViOS binutils with integrated libc support for i386-vios-elf target." \
-            --latest \
-            "${FILES[@]}"
+            --latest
             
-          echo "Release created successfully"
+          echo "Release created, waiting for it to be ready..."
+          sleep 5
+          
+          # Upload files one by one with retries
+          echo "Uploading files..."
+          for file in release_files/*; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              echo "Uploading $filename..."
+              
+              # Try upload with retry
+              max_attempts=3
+              attempt=1
+              
+              while [ $attempt -le $max_attempts ]; do
+                if gh release upload ${{ github.ref_name }} "$file"; then
+                  echo "✅ Successfully uploaded $filename"
+                  break
+                else
+                  echo "❌ Failed to upload $filename (attempt $attempt/$max_attempts)"
+                  if [ $attempt -eq $max_attempts ]; then
+                    echo "Failed to upload $filename after $max_attempts attempts"
+                    exit 1
+                  fi
+                  attempt=$((attempt + 1))
+                  sleep 3
+                fi
+              done
+            fi
+          done
+            
+          echo "All files uploaded successfully"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
