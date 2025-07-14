@@ -1,0 +1,68 @@
+# ChangeLog
+
+All notable changes to ViOS Binutils will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- Initial implementation of ViOS binutils
+- Support for i386-vios-elf target
+- Default linker scripts for ViOS userspace
+- GNU-style command-line interface compatibility
+- Cross-platform support (macOS, Linux)
+
+### Features
+- i386-vios-elf-ld: Linker with ViOS-specific defaults
+- i386-vios-elf-objcopy: Object file format converter
+- i386-vios-elf-objdump: Object file disassembler
+- i386-vios-elf-ar: Archive manager
+- i386-vios-elf-strip: Symbol stripper
+- i386-vios-elf-nm: Symbol table viewer
+- i386-vios-elf-size: Section size reporter
+- i386-vios-elf-readelf: ELF file analyzer
+- i386-vios-elf-strings: String extractor
+- i386-vios-elf-as: Assembler wrapper
+
+### Changed
+- N/A (initial release)
+
+### Deprecated
+- N/A (initial release)
+
+### Removed
+- N/A (initial release)
+
+### Fixed
+- N/A (initial release)
+
+### Security
+- N/A (initial release)
+
+## [1.0.0] - 2025-01-14
+
+### Added
+- Initial public release of ViOS Binutils
+- Complete binutils suite for i386-vios-elf target
+- GNU autotools-style configure script
+- Homebrew formula support
+- Comprehensive documentation
+- MIT license
+- GitHub Actions CI/CD pipeline
+- Cross-platform build support
+
+### Features
+- Memory layout optimized for ViOS (base address 0x400000)
+- Page-aligned sections (4096 bytes)
+- Integration with ViOS libc
+- Standard ELF32 i386 output format
+- Compatible with GNU binutils command-line interface
+
+### Documentation
+- Complete README with usage examples
+- Contributing guidelines
+- Installation instructions
+- Troubleshooting guide
+- API compatibility documentation

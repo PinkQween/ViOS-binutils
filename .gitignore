@@ -1,0 +1,79 @@
+# Build artifacts
+build/
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.out
+
+# Autotools
+autom4te.cache/
+config.log
+config.status
+config.cache
+configure.lineno
+configure.status.lineno
+
+# Generated files
+config.h
+config.mk
+Makefile
+libtool
+stamp-h1
+
+# Distribution archives
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.zip
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.pid
+*.lock
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Coverage and profiling
+*.gcov
+*.gcda
+*.gcno
+coverage/
+gmon.out
+
+# Package management
+node_modules/
+vendor/
+
+# Generated binaries
+i386-vios-elf-*
+
+# Test output
+test-results/
+test-output/

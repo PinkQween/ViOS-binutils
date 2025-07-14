@@ -1,0 +1,291 @@
+#!/bin/bash
+
+# ViOS binutils configure script
+# This script configures the build environment for ViOS binutils
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BUILD_DIR="${SCRIPT_DIR}/build"
+PREFIX="/opt/vios-binutils"
+TARGET="i386-vios-elf"
+HOST=""
+ENABLE_SHARED="no"
+ENABLE_STATIC="yes"
+ENABLE_64_BIT_BFD="no"
+DISABLE_WERROR="yes"
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --prefix=*)
+            PREFIX="${1#*=}"
+            shift
+            ;;
+        --target=*)
+            TARGET="${1#*=}"
+            shift
+            ;;
+        --host=*)
+            HOST="${1#*=}"
+            shift
+            ;;
+        --enable-shared)
+            ENABLE_SHARED="yes"
+            shift
+            ;;
+        --disable-shared)
+            ENABLE_SHARED="no"
+            shift
+            ;;
+        --enable-static)
+            ENABLE_STATIC="yes"
+            shift
+            ;;
+        --disable-static)
+            ENABLE_STATIC="no"
+            shift
+            ;;
+        --help|-h)
+            echo "ViOS binutils configure script"
+            echo ""
+            echo "Usage: $0 [options]"
+            echo ""
+            echo "Options:"
+            echo "  --prefix=DIR          Install prefix (default: /opt/vios-binutils)"
+            echo "  --target=TARGET       Target triplet (default: i386-vios-elf)"
+            echo "  --host=HOST           Host triplet (auto-detected)"
+            echo "  --enable-shared       Build shared libraries"
+            echo "  --disable-shared      Don't build shared libraries (default)"
+            echo "  --enable-static       Build static libraries (default)"
+            echo "  --disable-static      Don't build static libraries"
+            echo "  --help, -h            Show this help message"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Use --help for usage information"
+            exit 1
+            ;;
+    esac
+done
+
+# Detect host if not specified
+if [[ -z "$HOST" ]]; then
+    case "$(uname -s)" in
+        Darwin)
+            HOST="x86_64-apple-darwin"
+            ;;
+        Linux)
+            HOST="x86_64-pc-linux-gnu"
+            ;;
+        *)
+            HOST="unknown"
+            ;;
+    esac
+fi
+
+echo "Configuring ViOS binutils..."
+echo "  Source directory: $SCRIPT_DIR"
+echo "  Build directory:  $BUILD_DIR"
+echo "  Install prefix:   $PREFIX"
+echo "  Target:           $TARGET"
+echo "  Host:             $HOST"
+echo "  Shared libraries: $ENABLE_SHARED"
+echo "  Static libraries: $ENABLE_STATIC"
+
+# Create build directory
+mkdir -p "$BUILD_DIR"
+
+# Generate config.h
+cat > "$BUILD_DIR/config.h" << EOF
+/* Configuration header for ViOS binutils */
+#ifndef VIOS_BINUTILS_CONFIG_H
+#define VIOS_BINUTILS_CONFIG_H
+
+#define PACKAGE_NAME "vios-binutils"
+#define PACKAGE_VERSION "2.40-vios"
+#define PACKAGE_STRING "vios-binutils 2.40-vios"
+#define PACKAGE_BUGREPORT "vios-dev@example.com"
+
+#define TARGET_ALIAS "$TARGET"
+#define HOST_ALIAS "$HOST"
+
+/* Target architecture */
+#define TARGET_I386 1
+#define TARGET_ELF 1
+
+/* Features */
+#define HAVE_ZLIB 1
+#define HAVE_LIBINTL_H 0
+#define ENABLE_NLS 0
+
+/* Paths */
+#define BINDIR "$PREFIX/bin"
+#define LIBDIR "$PREFIX/lib"
+#define DATADIR "$PREFIX/share"
+
+#endif /* VIOS_BINUTILS_CONFIG_H */
+EOF
+
+# Generate Makefile
+cat > "$BUILD_DIR/Makefile" << 'EOF'
+# Generated Makefile for ViOS binutils
+
+include ../config.mk
+
+SRCDIR = ..
+BUILDDIR = .
+VPATH = $(SRCDIR)
+
+# Source files
+LD_SOURCES = $(wildcard $(SRCDIR)/ld/*.c)
+OBJDUMP_SOURCES = $(wildcard $(SRCDIR)/objdump/*.c)
+OBJCOPY_SOURCES = $(wildcard $(SRCDIR)/objcopy/*.c)
+AR_SOURCES = $(wildcard $(SRCDIR)/ar/*.c)
+NM_SOURCES = $(wildcard $(SRCDIR)/nm/*.c)
+STRIP_SOURCES = $(wildcard $(SRCDIR)/strip/*.c)
+SIZE_SOURCES = $(wildcard $(SRCDIR)/size/*.c)
+STRINGS_SOURCES = $(wildcard $(SRCDIR)/strings/*.c)
+READELF_SOURCES = $(wildcard $(SRCDIR)/readelf/*.c)
+AS_SOURCES = $(wildcard $(SRCDIR)/as/*.c)
+
+# Object files
+LD_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(LD_SOURCES))
+OBJDUMP_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(OBJDUMP_SOURCES))
+OBJCOPY_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(OBJCOPY_SOURCES))
+AR_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(AR_SOURCES))
+NM_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(NM_SOURCES))
+STRIP_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(STRIP_SOURCES))
+SIZE_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(SIZE_SOURCES))
+STRINGS_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(STRINGS_SOURCES))
+READELF_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(READELF_SOURCES))
+AS_OBJECTS = $(patsubst $(SRCDIR)/%.c,%.o,$(AS_SOURCES))
+
+# Binaries
+PROGRAMS = $(TARGET)-ld $(TARGET)-objdump $(TARGET)-objcopy $(TARGET)-ar \
+           $(TARGET)-nm $(TARGET)-strip $(TARGET)-size $(TARGET)-strings \
+           $(TARGET)-readelf $(TARGET)-as
+
+.PHONY: all clean install
+
+all: $(PROGRAMS)
+
+# Link binaries
+$(TARGET)-ld: $(LD_OBJECTS) libbfd.a
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(TARGET)-objdump: $(OBJDUMP_OBJECTS) libbfd.a
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(TARGET)-objcopy: $(OBJCOPY_OBJECTS) libbfd.a
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(TARGET)-ar: $(AR_OBJECTS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(TARGET)-nm: $(NM_OBJECTS) libbfd.a
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(TARGET)-strip: $(STRIP_OBJECTS) libbfd.a
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(TARGET)-size: $(SIZE_OBJECTS) libbfd.a
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(TARGET)-strings: $(STRINGS_OBJECTS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(TARGET)-readelf: $(READELF_OBJECTS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+$(TARGET)-as: $(AS_OBJECTS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+# Build libbfd
+libbfd.a: $(wildcard $(SRCDIR)/bfd/*.c)
+	@mkdir -p bfd
+	@for src in $(SRCDIR)/bfd/*.c; do \
+		obj=bfd/$$(basename $$src .c).o; \
+		echo "  CC    $$obj"; \
+		$(CC) $(CFLAGS) -c $$src -o $$obj; \
+	done
+	$(AR) rcs $@ bfd/*.o
+
+# Compile C files
+%.o: %.c
+	@mkdir -p $(dir $@)
+	@echo "  CC    $@"
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -rf $(PROGRAMS) *.o */*.o libbfd.a
+
+install: all
+	@echo "Installing ViOS binutils to $(PREFIX)..."
+	@mkdir -p $(DESTDIR)$(PREFIX)/bin
+	@mkdir -p $(DESTDIR)$(PREFIX)/share/man/man1
+	@mkdir -p $(DESTDIR)$(PREFIX)/share/doc/vios-binutils
+	@mkdir -p $(DESTDIR)$(PREFIX)/lib/ldscripts
+	
+	# Install binaries
+	@for prog in $(PROGRAMS); do \
+		echo "  Installing $$prog"; \
+		cp $$prog $(DESTDIR)$(PREFIX)/bin/; \
+		chmod 755 $(DESTDIR)$(PREFIX)/bin/$$prog; \
+	done
+	
+	# Install linker scripts
+	@cp $(SRCDIR)/ldscripts/*.ld $(DESTDIR)$(PREFIX)/lib/ldscripts/
+	
+	# Install documentation
+	@cp $(SRCDIR)/README.md $(DESTDIR)$(PREFIX)/share/doc/vios-binutils/
+	@cp $(SRCDIR)/ChangeLog $(DESTDIR)$(PREFIX)/share/doc/vios-binutils/ 2>/dev/null || true
+	
+	@echo "Installation complete"
+EOF
+
+# Generate config.mk
+cat > config.mk << EOF
+# Configuration for ViOS binutils build
+
+# Build configuration
+TARGET = $TARGET
+HOST = $HOST
+PREFIX = $PREFIX
+ENABLE_SHARED = $ENABLE_SHARED
+ENABLE_STATIC = $ENABLE_STATIC
+
+# Compiler settings
+CC = gcc
+AR = ar
+RANLIB = ranlib
+STRIP = strip
+
+# Flags
+CFLAGS = -O2 -g -Wall -Wextra -std=c99 -D_GNU_SOURCE \\
+         -DTARGET_I386=1 -DTARGET_ELF=1 \\
+         -DPACKAGE_VERSION='"2.40-vios"' \\
+         -DBINDIR='"$PREFIX/bin"' \\
+         -DLIBDIR='"$PREFIX/lib"' \\
+         -DDATADIR='"$PREFIX/share"' \\
+         -I. -I\$(SRCDIR)/include -I\$(SRCDIR)/bfd -I\$(SRCDIR)/include/elf
+
+LDFLAGS = 
+LIBS = -lz
+
+# Install directories
+DESTDIR =
+EOF
+
+echo ""
+echo "Configuration complete. To build:"
+echo "  make"
+echo ""
+echo "To install:"
+echo "  make install"
+echo ""
+echo "Configuration saved to:"
+echo "  config.mk"
+echo "  build/config.h"
+echo "  build/Makefile"
