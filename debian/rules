@@ -6,6 +6,10 @@ export DH_VERBOSE=1
 %:
 	dh $@
 
+# Skip configure as we don't have autotools
+override_dh_auto_configure:
+	# Skip configure step
+
 override_dh_auto_build:
 	$(MAKE) PREFIX=/usr VIOS_PREFIX=/opt/ViOS
 

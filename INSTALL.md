@@ -89,6 +89,8 @@ paru -S vios-binutils
 
 ### From Source
 
+#### Using the Installation Script (Recommended)
+
 ```bash
 # Install dependencies
 # On Debian/Ubuntu:
@@ -100,6 +102,20 @@ sudo pacman -S base-devel zlib curl
 # On macOS:
 brew install zlib curl
 
+# Clone and install
+git clone https://github.com/PinkQween/ViOS-binutils.git
+cd ViOS-binutils
+
+# Install to default location (/opt/vios-binutils)
+sudo ./install.sh
+
+# Or install to custom location
+sudo ./install.sh --prefix=/usr/local --vios-prefix=/usr/local/vios
+```
+
+#### Manual Installation
+
+```bash
 # Clone and build
 git clone https://github.com/PinkQween/ViOS-binutils.git
 cd ViOS-binutils
@@ -117,7 +133,9 @@ make install PREFIX=/usr/local VIOS_PREFIX=/usr/local/vios
 make install DESTDIR=/tmp/install PREFIX=/usr VIOS_PREFIX=/opt/ViOS
 ```
 
-## Verification
+## Verification and Testing
+
+### Quick Verification
 
 After installation, verify that the tools are working:
 
@@ -140,6 +158,23 @@ i386-vios-elf-gcc -c test.c -o test.o  # If you have a cross-compiler
 i386-vios-elf-ld test.o -o test
 i386-vios-elf-objdump -h test
 ```
+
+### Comprehensive Testing
+
+For comprehensive testing of the built binaries:
+
+```bash
+# Run the test suite (from source directory)
+cd ViOS-binutils
+./test.sh
+```
+
+This will test:
+- Binary existence and executability
+- Basic functionality (help commands)
+- Object file creation and linking (if nasm is available)
+- ViOS libc installation
+- Linker scripts
 
 ## Environment Setup
 

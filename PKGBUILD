@@ -8,16 +8,34 @@ url="https://github.com/PinkQween/ViOS-binutils"
 license=('MIT')
 depends=('zlib' 'curl')
 makedepends=('gcc' 'make')
-source=("$pkgname-$pkgver.tar.gz::https://github.com/PinkQween/ViOS-binutils/archive/v$pkgver.tar.gz")
+source=("ViOS-binutils-$pkgver.tar.gz::https://github.com/PinkQween/ViOS-binutils/archive/v$pkgver.tar.gz")
 sha256sums=('SKIP')  # This will be updated when you create the release
 
 build() {
-    cd "$pkgname-$pkgver"
+    cd "$srcdir"
+    # The source might be extracted to different directory names
+    if [ -d "$pkgname-$pkgver" ]; then
+        cd "$pkgname-$pkgver"
+    elif [ -d "ViOS-binutils-$pkgver" ]; then
+        cd "ViOS-binutils-$pkgver"
+    else
+        # Find the extracted directory
+        cd $(find . -maxdepth 1 -type d -name "*binutils*" | head -1)
+    fi
     make PREFIX=/usr VIOS_PREFIX=/opt/ViOS
 }
 
 package() {
-    cd "$pkgname-$pkgver"
+    cd "$srcdir"
+    # The source might be extracted to different directory names
+    if [ -d "$pkgname-$pkgver" ]; then
+        cd "$pkgname-$pkgver"
+    elif [ -d "ViOS-binutils-$pkgver" ]; then
+        cd "ViOS-binutils-$pkgver"
+    else
+        # Find the extracted directory
+        cd $(find . -maxdepth 1 -type d -name "*binutils*" | head -1)
+    fi
     make install PREFIX=/usr VIOS_PREFIX=/opt/ViOS DESTDIR="$pkgdir"
     
     # Install license
@@ -33,7 +51,16 @@ package() {
 
 # Optional: Add check function for testing
 check() {
-    cd "$pkgname-$pkgver"
+    cd "$srcdir"
+    # The source might be extracted to different directory names
+    if [ -d "$pkgname-$pkgver" ]; then
+        cd "$pkgname-$pkgver"
+    elif [ -d "ViOS-binutils-$pkgver" ]; then
+        cd "ViOS-binutils-$pkgver"
+    else
+        # Find the extracted directory
+        cd $(find . -maxdepth 1 -type d -name "*binutils*" | head -1)
+    fi
     
     # Basic sanity checks
     test -f "i386-vios-elf-ld" || (echo "ld not found" && exit 1)
