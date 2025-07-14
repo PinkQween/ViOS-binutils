@@ -1,4 +1,4 @@
-ENTRY(_start)
+ENTRY(c_start)
 OUTPUT_FORMAT(elf32-i386)
 OUTPUT_ARCH(i386)
 

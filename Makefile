@@ -53,7 +53,7 @@ AS_OBJ        := $(patsubst src/%.c,build/%.o,$(AS_SRC))
 PROGRAMS      := $(TARGET)-ld $(TARGET)-objdump $(TARGET)-objcopy \
                  $(TARGET)-ar $(TARGET)-nm $(TARGET)-strip \
                  $(TARGET)-size $(TARGET)-strings $(TARGET)-readelf \
-                 $(TARGET)-as
+                 $(TARGET)-as $(TARGET)-gcc $(TARGET)-g++
 
 .PHONY: all clean install uninstall vios-libc ldscripts check
 
@@ -88,7 +88,7 @@ vios-libc:
 # Create linker scripts
 ldscripts:
 	@mkdir -p ldscripts
-	@echo 'ENTRY(_start)' > ldscripts/vios.ld
+	@echo 'ENTRY(c_start)' > ldscripts/vios.ld
 	@echo 'OUTPUT_FORMAT(elf32-i386)' >> ldscripts/vios.ld
 	@echo 'OUTPUT_ARCH(i386)' >> ldscripts/vios.ld
 	@echo '' >> ldscripts/vios.ld
@@ -183,6 +183,40 @@ $(TARGET)-as: $(AS_OBJ) $(COMMON_OBJ) | build
 	else \
 		echo "  SKIP  $@ (no source files)"; \
 	fi
+
+# Create GCC compiler wrapper
+$(TARGET)-gcc: | build
+	@echo "  CREATE $@"
+	@echo '#!/bin/bash' > $@
+	@echo 'VIOS_SYSROOT="/opt/ViOS"' >> $@
+	@echo 'VIOS_CFLAGS="-I$$VIOS_SYSROOT/include -ffreestanding -fno-builtin"' >> $@
+	@echo 'VIOS_LDFLAGS="-L$$VIOS_SYSROOT/lib -e c_start -nostdlib -nostartfiles"' >> $@
+	@echo 'VIOS_LIBS="$$VIOS_SYSROOT/lib/libViOSlibc.a"' >> $@
+	@echo '' >> $@
+	@echo '# Check if we are linking (no -c flag)' >> $@
+	@echo 'if [[ "$$*" != *"-c"* ]]; then' >> $@
+	@echo '  exec i686-elf-gcc $$VIOS_CFLAGS "$$@" $$VIOS_LDFLAGS $$VIOS_LIBS' >> $@
+	@echo 'else' >> $@
+	@echo '  exec i686-elf-gcc $$VIOS_CFLAGS "$$@"' >> $@
+	@echo 'fi' >> $@
+	@chmod +x $@
+
+# Create G++ compiler wrapper
+$(TARGET)-g++: | build
+	@echo "  CREATE $@"
+	@echo '#!/bin/bash' > $@
+	@echo 'VIOS_SYSROOT="/opt/ViOS"' >> $@
+	@echo 'VIOS_CFLAGS="-I$$VIOS_SYSROOT/include -ffreestanding -fno-builtin"' >> $@
+	@echo 'VIOS_LDFLAGS="-L$$VIOS_SYSROOT/lib -e c_start -nostdlib -nostartfiles"' >> $@
+	@echo 'VIOS_LIBS="$$VIOS_SYSROOT/lib/libViOSlibc.a"' >> $@
+	@echo '' >> $@
+	@echo '# Check if we are linking (no -c flag)' >> $@
+	@echo 'if [[ "$$*" != *"-c"* ]]; then' >> $@
+	@echo '  exec i686-elf-g++ $$VIOS_CFLAGS "$$@" $$VIOS_LDFLAGS $$VIOS_LIBS' >> $@
+	@echo 'else' >> $@
+	@echo '  exec i686-elf-g++ $$VIOS_CFLAGS "$$@"' >> $@
+	@echo 'fi' >> $@
+	@chmod +x $@
 
 # Compile C files
 build/%.o: src/%.c | build
