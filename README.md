@@ -31,11 +31,11 @@ The following components are versioned together and must be used in compatible v
 
 ## 🧠 Community and Contribution
 
-![GitHub Discussions](https://img.shields.io/github/discussions/PinkQween/binutils)
-![Forks](https://img.shields.io/github/forks/PinkQween/binutils?style=social)
-![Commit Activity](https://img.shields.io/github/commit-activity/w/PinkQween/binutils)
-![Total Issues](https://img.shields.io/github/issues-closed-raw/PinkQween/binutils?label=total%20issues&color=blue)
-![Total PRs](https://img.shields.io/github/issues-pr-closed-raw/PinkQween/binutils?label=total%20PRs&color=blue)
+![GitHub Discussions](https://img.shields.io/github/discussions/PinkQween/vios-binutils)
+![Forks](https://img.shields.io/github/forks/PinkQween/vios-binutils?style=social)
+![Commit Activity](https://img.shields.io/github/commit-activity/w/PinkQween/vios-binutils)
+![Total Issues](https://img.shields.io/github/issues-closed-raw/PinkQween/vios-binutils?label=total%20issues&color=blue)
+![Total PRs](https://img.shields.io/github/issues-pr-closed-raw/PinkQween/vios-binutils?label=total%20PRs&color=blue)
 
 A collection of binary utilities specifically designed for the ViOS operating system, targeting the i386 architecture with ELF format.
 
