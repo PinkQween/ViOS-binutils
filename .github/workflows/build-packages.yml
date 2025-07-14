@@ -49,12 +49,12 @@ jobs:
           # Create binaries archive
           tar -czf dist/vios-binutils-binaries-${{ steps.version.outputs.version }}.tar.gz i386-vios-elf-* ldscripts/
           
-          # Create ViOS libc archive if it exists
-          if [ -d "/opt/ViOS" ]; then
-            tar -czf dist/vios-libc-${{ steps.version.outputs.version }}.tar.gz -C /opt/ViOS .
-          else
-            echo "ViOS libc not found, skipping archive creation"
-          fi
+          # Ensure no ViOS libc archive is present
+          rm -f dist/vios-libc-*.tar.gz
+          
+          # List files to verify
+          echo "Files in dist directory:"
+          ls -la dist/
           
       - name: Upload source artifact
         uses: actions/upload-artifact@v4
@@ -185,15 +185,39 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         
+      - name: Prepare release files
+        run: |
+          mkdir -p release_files
+          
+          # Copy source files
+          if [ -d "source" ]; then
+            cp source/* release_files/ 2>/dev/null || true
+          fi
+          
+          # Copy debian package
+          if [ -d "debian-package" ]; then
+            cp debian-package/* release_files/ 2>/dev/null || true
+          fi
+          
+          # Copy arch package
+          if [ -d "arch-package" ]; then
+            cp arch-package/* release_files/ 2>/dev/null || true
+          fi
+          
+          # Remove any unwanted files
+          rm -f release_files/vios-libc-*.tar.gz
+          
+          # List final files
+          echo "Files to be released:"
+          ls -la release_files/
+          
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            source/*
-            debian-package/*
-            arch-package/*
+          files: release_files/*
           generate_release_notes: true
           draft: false
           prerelease: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
