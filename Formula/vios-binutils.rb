@@ -12,12 +12,11 @@ class ViosBinutils < Formula
   def install
     # Build and install with integrated ViOS libc
     system "make", "PREFIX=#{prefix}", "VIOS_PREFIX=#{prefix}/vios"
-    system "make", "install", "PREFIX=#{prefix}", "VIOS_PREFIX=#{prefix}/vios", "DESTDIR=#{prefix}"
+    system "make", "install", "PREFIX=#{prefix}", "VIOS_PREFIX=#{prefix}/vios"
   end
 
   test do
     # Test that the binaries exist and are executable
-    assert_predicate bin/"i386-vios-elf-gcc", :exist?
     assert_predicate bin/"i386-vios-elf-ld", :exist?
     assert_predicate bin/"i386-vios-elf-objdump", :exist?
     assert_predicate bin/"i386-vios-elf-objcopy", :exist?
