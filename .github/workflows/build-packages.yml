@@ -211,6 +211,19 @@ jobs:
           echo "Files to be released:"
           ls -la release_files/
           
+      - name: Delete existing release if it exists
+        run: |
+          # Delete existing release and tag if they exist
+          if gh release view ${{ github.ref_name }} >/dev/null 2>&1; then
+            echo "Deleting existing release ${{ github.ref_name }}"
+            gh release delete ${{ github.ref_name }} --yes
+          else
+            echo "No existing release found for ${{ github.ref_name }}"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+        
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
