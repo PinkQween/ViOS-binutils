@@ -24,11 +24,34 @@ jobs:
             VERSION=$(date +%Y%m%d)-$(git rev-parse --short HEAD)
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential zlib1g-dev curl
           
-      - name: Create source tarball
+      - name: Build binaries
+        run: |
+          # Build the binaries
+          make clean
+          make
+          
+      - name: Create source and build artifacts
         run: |
           mkdir -p dist
+          
+          # Create source tarball
           git archive --format=tar.gz --prefix=vios-binutils-${{ steps.version.outputs.version }}/ HEAD > dist/vios-binutils-${{ steps.version.outputs.version }}.tar.gz
+          
+          # Create binaries archive
+          tar -czf dist/vios-binutils-binaries-${{ steps.version.outputs.version }}.tar.gz i386-vios-elf-* ldscripts/
+          
+          # Create ViOS libc archive if it exists
+          if [ -d "/opt/ViOS" ]; then
+            tar -czf dist/vios-libc-${{ steps.version.outputs.version }}.tar.gz -C /opt/ViOS .
+          else
+            echo "ViOS libc not found, skipping archive creation"
+          fi
           
       - name: Upload source artifact
         uses: actions/upload-artifact@v4
