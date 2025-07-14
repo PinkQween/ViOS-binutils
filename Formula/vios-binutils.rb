@@ -2,7 +2,7 @@ class ViosBinutils < Formula
   desc "Binary utilities for the ViOS operating system (i386-vios-elf target) with integrated libc"
   homepage "https://github.com/PinkQween/ViOS-binutils"
   url "https://github.com/PinkQween/ViOS-binutils/archive/v1.0.0.tar.gz"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000" # This will be updated when you create the release
+  sha256 "" # Will be calculated from the actual release
   license "MIT"
   head "https://github.com/PinkQween/ViOS-binutils.git", branch: "main"
 
@@ -17,6 +17,7 @@ class ViosBinutils < Formula
 
   test do
     # Test that the binaries exist and are executable
+    assert_predicate bin/"i386-vios-elf-gcc", :exist?
     assert_predicate bin/"i386-vios-elf-ld", :exist?
     assert_predicate bin/"i386-vios-elf-objdump", :exist?
     assert_predicate bin/"i386-vios-elf-objcopy", :exist?
