@@ -18,7 +18,8 @@ configure.status.lineno
 # Generated files
 config.h
 config.mk
-Makefile
+# Makefile - commented out because we have a custom Makefile
+# Makefile
 libtool
 stamp-h1
 
