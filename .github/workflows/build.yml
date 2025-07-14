@@ -26,6 +26,16 @@ jobs:
     
     - name: Build
       run: |
+        # Debug: Check current directory and files
+        pwd
+        ls -la
+        
+        # Ensure we have a Makefile
+        if [ ! -f Makefile ]; then
+          echo "Error: Makefile not found in current directory"
+          exit 1
+        fi
+        
         # Skip ViOS libc installation in CI
         mkdir -p /tmp/fake-vios/lib
         touch /tmp/fake-vios/lib/libViOSlibc.a
@@ -61,6 +71,16 @@ jobs:
     
     - name: Build
       run: |
+        # Debug: Check current directory and files
+        pwd
+        ls -la
+        
+        # Ensure we have a Makefile
+        if [ ! -f Makefile ]; then
+          echo "Error: Makefile not found in current directory"
+          exit 1
+        fi
+        
         # Skip ViOS libc installation in CI
         mkdir -p /tmp/fake-vios/lib
         touch /tmp/fake-vios/lib/libViOSlibc.a
