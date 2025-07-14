@@ -40,11 +40,11 @@ jobs:
         run: |
           mkdir -p dist
           
-          # Create source tarball with proper naming for packages
+          # Create source tarball for package managers (lowercase naming)
           git archive --format=tar.gz --prefix=vios-binutils-${{ steps.version.outputs.version }}/ HEAD > dist/vios-binutils-source-${{ steps.version.outputs.version }}.tar.gz
           
-          # Also create one with the GitHub repo name for compatibility
-          git archive --format=tar.gz --prefix=ViOS-binutils-${{ steps.version.outputs.version }}/ HEAD > dist/ViOS-binutils-source-${{ steps.version.outputs.version }}.tar.gz
+          # Create source tarball with GitHub repo naming for compatibility
+          git archive --format=tar.gz --prefix=ViOS-binutils-${{ steps.version.outputs.version }}/ HEAD > dist/ViOS-binutils-github-${{ steps.version.outputs.version }}.tar.gz
           
           # Create binaries archive
           tar -czf dist/vios-binutils-binaries-${{ steps.version.outputs.version }}.tar.gz i386-vios-elf-* ldscripts/
