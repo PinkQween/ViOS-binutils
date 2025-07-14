@@ -1,8 +1,8 @@
 # ViOS Binutils
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)](https://github.com/skairipa/vios-binutils)
-[![Target](https://img.shields.io/badge/target-i386--vios--elf-blue)](https://github.com/skairipa/vios-binutils)
+[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)](https://github.com/PinkQween/ViOS-binutils)
+[![Target](https://img.shields.io/badge/target-i386--vios--elf-blue)](https://github.com/PinkQween/ViOS-binutils)
 
 A collection of binary utilities specifically designed for the ViOS operating system, targeting the i386 architecture with ELF format.
 
@@ -37,7 +37,7 @@ ViOS Binutils provides essential development tools for building applications for
 
 ```bash
 # Add the ViOS tap
-brew tap skairipa/vios
+brew tap PinkQween/vios
 
 # Install ViOS binutils
 brew install vios-binutils
@@ -55,8 +55,8 @@ brew install vios-binutils
 
 ```bash
 # Clone the repository
-git clone https://github.com/skairipa/vios-binutils.git
-cd vios-binutils
+git clone https://github.com/PinkQween/ViOS-binutils.git
+cd ViOS-binutils
 
 # Configure the build
 ./configure --prefix=/opt/vios-binutils
@@ -181,8 +181,8 @@ The configure script supports various options:
 ### Building from Git
 
 ```bash
-git clone https://github.com/skairipa/vios-binutils.git
-cd vios-binutils
+git clone https://github.com/PinkQween/ViOS-binutils.git
+cd ViOS-binutils
 ./configure
 make
 make check  # Run tests (if available)
@@ -241,13 +241,13 @@ sudo make install
 
 ## Versioning
 
-We use [Semantic Versioning](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/skairipa/vios-binutils/tags).
+We use [Semantic Versioning](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/PinkQween/ViOS-binutils/tags).
 
 ## Authors
 
 - **ViOS Development Team** - *Initial work* - [ViOS Project](https://github.com/skairipa/ViOS)
 
-See also the list of [contributors](https://github.com/skairipa/vios-binutils/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/PinkQween/ViOS-binutils/contributors) who participated in this project.
 
 ## License
 
@@ -268,7 +268,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 - 📖 [Documentation](README.md)
-- 🐛 [Report a Bug](https://github.com/skairipa/vios-binutils/issues/new?template=bug_report.md)
-- 💡 [Request a Feature](https://github.com/skairipa/vios-binutils/issues/new?template=feature_request.md)
-- 💬 [Discussions](https://github.com/skairipa/vios-binutils/discussions)
+- 🐛 [Report a Bug](https://github.com/PinkQween/ViOS-binutils/issues/new?template=bug_report.md)
+- 💡 [Request a Feature](https://github.com/PinkQween/ViOS-binutils/issues/new?template=feature_request.md)
+- 💬 [Discussions](https://github.com/PinkQween/ViOS-binutils/discussions)
 
