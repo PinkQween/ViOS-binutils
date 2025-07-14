@@ -30,7 +30,7 @@ jobs:
     
     - name: Build
       run: |
-        make -j$(nproc)
+        make -j$(sysctl -n hw.ncpu)
     
     - name: Test
       run: |

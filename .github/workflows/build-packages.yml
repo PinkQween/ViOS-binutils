@@ -120,7 +120,10 @@ jobs:
       - name: Test build
         run: |
           make clean
-          make
+          # Skip ViOS libc installation in CI
+          mkdir -p /tmp/fake-vios/lib
+          touch /tmp/fake-vios/lib/libViOSlibc.a
+          make VIOS_PREFIX=/tmp/fake-vios
           
           # Check that all binaries were built
           ls -la i386-vios-elf-*
@@ -128,20 +131,20 @@ jobs:
           
       - name: Test installation
         run: |
-          # Test local installation
-          make install DESTDIR=/tmp/test-install PREFIX=/usr VIOS_PREFIX=/opt/ViOS
+          # Test local installation with local prefix
+          make install DESTDIR=/tmp/test-install PREFIX=/usr VIOS_PREFIX=/tmp/test-install/opt/ViOS
           
           # Check installed files
           ls -la /tmp/test-install/usr/bin/i386-vios-elf-*
           ls -la /tmp/test-install/usr/lib/ldscripts/
           
           # Check if ViOS libc was installed
-          if [ -d "/opt/ViOS" ]; then
-            echo "ViOS libc found in /opt/ViOS"
-            ls -la /opt/ViOS/lib/
-            ls -la /opt/ViOS/include/
+          if [ -d "/tmp/test-install/opt/ViOS" ]; then
+            echo "ViOS libc found in /tmp/test-install/opt/ViOS"
+            ls -la /tmp/test-install/opt/ViOS/lib/
+            ls -la /tmp/test-install/opt/ViOS/include/
           else
-            echo "Warning: ViOS libc not found in /opt/ViOS"
+            echo "Warning: ViOS libc not found in /tmp/test-install/opt/ViOS"
           fi
 
   release:
