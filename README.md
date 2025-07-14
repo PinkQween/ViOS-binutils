@@ -24,7 +24,7 @@ The following components are versioned together and must be used in compatible v
 ## 🔧 Build Status
 
 [![Build: Libc](https://github.com/PinkQween/ViOS-Libc/actions/workflows/build.yml/badge.svg)](https://github.com/PinkQween/ViOS-Libc/actions/workflows/build.yml)
-[![Build: Binutils](https://github.com/PinkQween/ViOS-Libc/actions/workflows/build.yml/badge.svg)](https://github.com/PinkQween/ViOS-binutils/actions/workflows/build.yml)
+[![Build: Binutils](https://github.com/PinkQween/ViOS-binutils/actions/workflows/build.yml/badge.svg)](https://github.com/PinkQween/ViOS-binutils/actions/workflows/build.yml)
 [![Build: OS (ViOS)](https://github.com/PinkQween/ViOS/actions/workflows/build.yml/badge.svg)](https://github.com/PinkQween/ViOS/actions/workflows/build.yml)
 
 ---
